@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnaryMultiplication.Machines;
 
 namespace UnaryMultiplication
 {
@@ -9,6 +10,8 @@ namespace UnaryMultiplication
     {
         private static string _mode = "";
         private static readonly List<string> Commands = new List<string> {"exit", "to_grammar", "check"};
+
+        private static LinearlyBoundedAutomaton? _linearlyBoundedAutomaton;
 
         public static void Main(string[] args)
         {
@@ -39,9 +42,11 @@ namespace UnaryMultiplication
                                 switch (_mode)
                                 {
                                     case "T0":
+                                        //
                                         
                                         break;
                                     case "T1":
+                                        _linearlyBoundedAutomaton = new LinearlyBoundedAutomaton(comArg[1]);
                                         
                                         break;
                                 } 
@@ -53,9 +58,11 @@ namespace UnaryMultiplication
                             switch (_mode)
                             {
                                 case "T0":
+                                    //
                                     
                                     break;
                                 case "T1":
+                                    //
                                     
                                     break;
                             } 
