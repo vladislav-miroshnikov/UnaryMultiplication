@@ -29,6 +29,7 @@ namespace UnaryMultiplication
                     case 1:
                         if (comArg[0].Equals(Commands[0])) Environment.Exit(0);
                         else Console.WriteLine("Unknown command.");
+                        
                         break;
                     case 2:
                         if (comArg[0].Equals(Commands[1]))
@@ -64,6 +65,7 @@ namespace UnaryMultiplication
                         break;
                     default:
                         Console.WriteLine("Unknown commands count.");
+                        
                         break;
                 }
             }
