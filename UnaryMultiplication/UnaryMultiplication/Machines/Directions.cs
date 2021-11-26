@@ -1,8 +1,8 @@
 ﻿namespace UnaryMultiplication.Machines
 {
-    public enum Directions
+    public class Directions
     {
-        Left = '<',
-        Right = '>'
+        public string LeftDirection { get; init; } = "<";
+        public string RightDirection { get; init; } = ">";
     }
 }
