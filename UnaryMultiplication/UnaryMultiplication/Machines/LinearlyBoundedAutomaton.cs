@@ -6,8 +6,8 @@ namespace UnaryMultiplication.Machines
     {
         public LinearlyBoundedAutomaton(string path) : base(path)
         {
-            if (!this.LanguageAlphabet.Contains(BoundarySymbol.Left.ToString()) ||
-                !this.LanguageAlphabet.Contains(BoundarySymbol.Right.ToString()))
+            if (!this.LanguageAlphabet.Contains(BoundarySymbols.Left.ToString()) ||
+                !this.LanguageAlphabet.Contains(BoundarySymbols.Right.ToString()))
                 throw new Exception(
                     "No boundary symbol(s) in the alphabet. It must contains '#' as left and '$' as right");
         }
