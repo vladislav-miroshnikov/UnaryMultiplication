@@ -36,8 +36,8 @@ namespace UnaryMultiplication.Machines
             StartState = deserializeObject.start_state.ToObject<string>();
             Directions = new Directions
             {
-                LeftDirection = deserializeObject.directions.left.ToObject<string>(),
-                RightDirection = deserializeObject.directions.right.ToObject<string>()
+                Left = deserializeObject.directions.left.ToObject<string>(),
+                Right = deserializeObject.directions.right.ToObject<string>()
             };
             States = new HashSet<string>();
             Transitions = new Dictionary<Tuple<string, string>, Tuple<string, string, string>>();

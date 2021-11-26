@@ -2,7 +2,7 @@
 {
     public class Directions
     {
-        public string LeftDirection { get; init; } = "<";
-        public string RightDirection { get; init; } = ">";
+        public string Left { get; init; } = "<";
+        public string Right { get; init; } = ">";
     }
 }
