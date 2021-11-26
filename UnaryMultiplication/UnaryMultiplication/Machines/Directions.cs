@@ -1,8 +1,8 @@
 ﻿namespace UnaryMultiplication.Machines
 {
-    public class Directions
+    public static class Directions
     {
-        public string Left { get; init; } = "<";
-        public string Right { get; init; } = ">";
+        public static string Left { get; set; } = "<";
+        public static string Right { get; set; } = ">";
     }
 }

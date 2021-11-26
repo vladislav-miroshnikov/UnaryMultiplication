@@ -11,8 +11,6 @@ namespace UnaryMultiplication.Machines
 
         public HashSet<string> TapeAlphabet { get; private init; }
 
-        public Directions Directions { get; private init; }
-
         public HashSet<string> States { get; private init; }
 
         public HashSet<string> FinalStates { get; private init; }
@@ -34,11 +32,8 @@ namespace UnaryMultiplication.Machines
             TapeAlphabet = new HashSet<string>(LanguageAlphabet) { Blank };
             FinalStates = deserializeObject.final_states.ToObject<HashSet<string>>();
             StartState = deserializeObject.start_state.ToObject<string>();
-            Directions = new Directions
-            {
-                Left = deserializeObject.directions.left.ToObject<string>(),
-                Right = deserializeObject.directions.right.ToObject<string>()
-            };
+            Directions.Left = deserializeObject.directions.left.ToObject<string>();
+            Directions.Right = deserializeObject.directions.right.ToObject<string>();
             States = new HashSet<string>();
             Transitions = new Dictionary<Tuple<string, string>, Tuple<string, string, string>>();
             var transitions = deserializeObject.transitions;
