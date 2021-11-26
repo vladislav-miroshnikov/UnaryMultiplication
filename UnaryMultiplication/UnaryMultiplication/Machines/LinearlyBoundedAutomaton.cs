@@ -2,7 +2,7 @@
 
 namespace UnaryMultiplication.Machines
 {
-    public class LinearlyBoundedAutomaton : TuringMachine
+    public sealed class LinearlyBoundedAutomaton : TuringMachine
     {
         public LinearlyBoundedAutomaton(string path) : base(path)
         {
