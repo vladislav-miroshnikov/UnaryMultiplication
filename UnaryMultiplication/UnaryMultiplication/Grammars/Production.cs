@@ -22,12 +22,14 @@ namespace UnaryMultiplication.Grammars
         public override string ToString()
         {
             StringBuilder stringBuilder = new();
-            const string delimiter = ";";
+            const string delimiter = ",";
 
             Head.ForEach(symbol => stringBuilder.Append(symbol + delimiter));
-            stringBuilder.Append("->");
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            stringBuilder.Append(" -> ");
             Body.ForEach(symbol => stringBuilder.Append(symbol + delimiter));
-
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            
             return stringBuilder.ToString();
         }
     }

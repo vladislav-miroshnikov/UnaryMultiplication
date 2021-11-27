@@ -4,6 +4,8 @@ namespace UnaryMultiplication.Grammars
 {
     public abstract class MachineGrammar
     {
+        public const string Eps = "eps";
+
         public HashSet<string> Variables { get; protected init; }
 
         public HashSet<string> Terminals { get; protected init; }
