@@ -7,6 +7,10 @@ namespace UnaryMultiplication.Grammars
 {
     public sealed class FreeGrammar : MachineGrammar
     {
+        public FreeGrammar(string path) : base(path)
+        {
+        }
+
         public FreeGrammar(TuringMachine turingMachine)
         {
             GeneratedProductions = new HashSet<Production>();
@@ -49,7 +53,7 @@ namespace UnaryMultiplication.Grammars
             GeneratedProductions.Add(new Production(new List<string> { "S2" }, new List<string> { "S3" }));
 
             GeneratedProductions.Add(new Production(new List<string> { "S3" },
-                new List<string> { $"[{Eps}, {Eps}]", "S3" }));
+                new List<string> { $"[{Eps}, {Blank}]", "S3" }));
             GeneratedProductions.Add(new Production(new List<string> { "S3" }, new List<string> { Eps }));
         }
 
@@ -110,6 +114,32 @@ namespace UnaryMultiplication.Grammars
             {
                 TerminalProductions.Add(new Production(new List<string> { finalState }, new List<string> { Eps }));
             }
+        }
+
+        public (bool result, List<Tuple<List<string>, Production>>) CheckAccepting(string word)
+        {
+            var symbs = word.Select(s => $"[{s},{s}]").ToList();
+            var tapeWord = new List<string> { $"[{Eps}, {Blank}]", StartState };
+            tapeWord.AddRange(symbs);
+            tapeWord.Add($"[{Eps}, {Blank}]");
+            var inference = new List<Tuple<List<string>, Production>>
+            {
+                new Tuple<List<string>, Production>(new List<string> { StartVariable },
+                    new Production(new List<string> { "S1" }, new List<string> { "[eps, _]", "q0", "S2" }))
+            };
+            var current = new List<string> { "[eps, _]", "q0", "S2" };
+            foreach (var s in word)
+            {
+                inference.Add(new Tuple<List<string>, Production>(current,
+                    new Production(new List<string> { "S2" }, new List<string> { $"[{s}, {s}]", "S2" })));
+                current = current.Take(current.Count - 1).ToList();
+                current.AddRange(new List<string> { $"[{s},{s}]", "S2" });
+            }
+
+            inference.Add(new Tuple<List<string>, Production>(current,
+                new Production(new List<string> { "S2" }, new List<string> { "[eps, _]" })));
+            var (result, tuples) = CheckTreeInference(tapeWord);
+            return (result, inference.Concat(tuples).ToList());
         }
     }
 }

@@ -7,6 +7,10 @@ namespace UnaryMultiplication.Grammars
 {
     public sealed class ContextSensitiveGrammar : MachineGrammar
     {
+        public ContextSensitiveGrammar(string path) : base(path)
+        {
+        }
+        
         public ContextSensitiveGrammar(TuringMachine turingMachine)
         {
             var terminals = turingMachine.LanguageAlphabet
