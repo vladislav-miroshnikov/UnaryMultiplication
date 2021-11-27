@@ -119,25 +119,25 @@ namespace UnaryMultiplication.Grammars
         public (bool result, List<Tuple<List<string>, Production>>) CheckAccepting(string word)
         {
             var symbs = word.Select(s => $"[{s},{s}]").ToList();
-            var tapeWord = new List<string> { $"[{Eps}, {Blank}]", StartState };
+            var tapeWord = new List<string> { $"[{Eps},{Blank}]", StartState };
             tapeWord.AddRange(symbs);
-            tapeWord.Add($"[{Eps}, {Blank}]");
+            tapeWord.Add($"[{Eps},{Blank}]");
             var inference = new List<Tuple<List<string>, Production>>
             {
                 new Tuple<List<string>, Production>(new List<string> { StartVariable },
-                    new Production(new List<string> { "S1" }, new List<string> { "[eps, _]", "q0", "S2" }))
+                    new Production(new List<string> { "S1" }, new List<string> { "[eps,_]", "q0", "S2" }))
             };
-            var current = new List<string> { "[eps, _]", "q0", "S2" };
+            var current = new List<string> { "[eps,_]", "q0", "S2" };
             foreach (var s in word)
             {
                 inference.Add(new Tuple<List<string>, Production>(current,
-                    new Production(new List<string> { "S2" }, new List<string> { $"[{s}, {s}]", "S2" })));
+                    new Production(new List<string> { "S2" }, new List<string> { $"[{s},{s}]", "S2" })));
                 current = current.Take(current.Count - 1).ToList();
                 current.AddRange(new List<string> { $"[{s},{s}]", "S2" });
             }
 
             inference.Add(new Tuple<List<string>, Production>(current,
-                new Production(new List<string> { "S2" }, new List<string> { "[eps, _]" })));
+                new Production(new List<string> { "S2" }, new List<string> { "[eps,_]" })));
             var (result, tuples) = CheckTreeInference(tapeWord);
             return (result, inference.Concat(tuples).ToList());
         }
