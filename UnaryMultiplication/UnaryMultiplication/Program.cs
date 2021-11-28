@@ -21,7 +21,7 @@ namespace UnaryMultiplication
 
             while (true)
             {
-                Console.Write(">>> ");
+                Console.Write(@">>> ");
                 var input = Console.ReadLine();
                 if (input == null) Environment.Exit(0);
 
@@ -32,7 +32,7 @@ namespace UnaryMultiplication
                 {
                     case 1:
                         if (comArg[0].Equals(Commands[0])) Environment.Exit(0);
-                        else Console.WriteLine("Unknown command.");
+                        else Console.WriteLine(@"Unknown command.");
 
                         break;
                     case 2:
@@ -54,13 +54,13 @@ namespace UnaryMultiplication
 
                                         if (result)
                                         {
-                                            Console.WriteLine($"Word {comArg[1]} accepted.");
+                                            Console.WriteLine($@"Word {comArg[1]} accepted.");
                                             GrammarUtil.PrintInference(comArg[1], directoryPath, GrammarType.T0,
                                                 inference);
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"Word {comArg[1]} not accepted.");
+                                            Console.WriteLine($@"Word {comArg[1]} not accepted.");
                                         }
 
                                         break;
@@ -70,19 +70,19 @@ namespace UnaryMultiplication
 
                                         if (result)
                                         {
-                                            Console.WriteLine($"Word {comArg[1]} accepted.");
+                                            Console.WriteLine($@"Word {comArg[1]} accepted.");
                                             GrammarUtil.PrintInference(comArg[1], directoryPath, GrammarType.T1,
                                                 inference);
                                         }
                                         else
                                         {
-                                            Console.WriteLine($"Word {comArg[1]} not accepted.");
+                                            Console.WriteLine($@"Word {comArg[1]} not accepted.");
                                         }
 
                                         break;
                                 }
                             }
-                            else Console.WriteLine("Unknown command.");
+                            else Console.WriteLine(@"Unknown command.");
                         }
                         catch(Exception exception)
                         {
@@ -91,7 +91,7 @@ namespace UnaryMultiplication
 
                         break;
                     default:
-                        Console.WriteLine("Unknown command length.");
+                        Console.WriteLine(@"Unknown command length.");
 
                         break;
                 }

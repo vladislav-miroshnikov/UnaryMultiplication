@@ -2,6 +2,9 @@
 
 A tool for checking multiplications in unary system using Type-0 and Type-1 grammars.
 
+Free Grammar with `49` production number used as Type-0 grammar.
+Context Sensitive Grammar with `80` production number used as Type-0 grammar.
+
 ### Step 1
 To run application use from folder with `UnaryMultiplication.exe` file:
 
@@ -30,4 +33,4 @@ To exit from application, use:
     
 Or
 
-    ctrl+z
+    ctrl^Z
