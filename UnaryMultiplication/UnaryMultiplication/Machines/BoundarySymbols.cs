@@ -1,8 +1,8 @@
 ﻿namespace UnaryMultiplication.Machines
 {
-    public enum BoundarySymbols
+    public static class BoundarySymbols
     {
-        Left = '#',
-        Right = '$'
+        public static string Left => "#";
+        public static string Right => "$";
     }
 }

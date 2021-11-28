@@ -47,18 +47,21 @@ namespace UnaryMultiplication.Grammars
         {
             var path = Path.Combine(directoryPath, @$"Resources\{grammarType}Inference.txt");
             StreamWriter file = new(path);
-            file.WriteLine($"Inference of word {word}:");
+            
+            file.WriteLine($"Word: {word}");
+            file.WriteLine($"Inference:");
 
             foreach (var (tapeWord, production) in inference)
             {
-                file.WriteLine(string.Join(" ", tapeWord));
+                file.WriteLine("\t" + string.Join(" ", tapeWord));
                 var prod = string.Join(" ", production.Head) + " -> " + string.Join(" ", production.Body);
-                file.WriteLine($"\tApplied production: {prod}");
+                file.WriteLine($"Applied production: {prod}");
             }
 
             file.WriteLine($"Result: {string.Join(" ", word)}");
             file.Close();
-            Console.WriteLine($"You can find file with inference by {path}");
+            
+            Console.WriteLine($"You can find file with inference by:\n{path}");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 
 namespace UnaryMultiplication.Machines
 {
@@ -6,9 +7,9 @@ namespace UnaryMultiplication.Machines
     {
         public LinearlyBoundedAutomaton(string path) : base(path)
         {
-            if (!this.LanguageAlphabet.Contains(BoundarySymbols.Left.ToString()) ||
-                !this.LanguageAlphabet.Contains(BoundarySymbols.Right.ToString()))
-                throw new Exception(
+            if (!LanguageAlphabet.Contains(BoundarySymbols.Left) ||
+                !LanguageAlphabet.Contains(BoundarySymbols.Right))
+                throw new ArgumentException(
                     "No boundary symbol(s) in the alphabet.\nIt must contains '#' as left and '$' as right.");
         }
     }

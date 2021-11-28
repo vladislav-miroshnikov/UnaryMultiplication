@@ -8,14 +8,16 @@ namespace UnaryMultiplication
 {
     public static class Program
     {
-        private static string _mode = "";
-        private static readonly List<string> Commands = new List<string> {"exit", "check"};
+        private static GrammarType _mode;
+        private static readonly List<string> Commands = new() {"exit", "check"};
 
         public static void Main(string[] args)
         {
-            if (args.Length != 1) throw new Exception("Wrong arguments count.");
-            _mode = args[0];
-            if (!_mode.Equals("T0") && !_mode.Equals("T1")) throw new Exception("Set the correct mode.");
+            if (args.Length != 1) throw new ArgumentException("Wrong arguments count.");
+
+            if (args[0].Equals(GrammarType.T0.ToString())) _mode = GrammarType.T0;
+            else if (args[0].Equals(GrammarType.T1.ToString())) _mode = GrammarType.T1;
+            else throw new ArgumentException("Set the correct grammar type.");
 
             while (true)
             {
@@ -23,48 +25,86 @@ namespace UnaryMultiplication
                 var input = Console.ReadLine();
                 if (input == null) Environment.Exit(0);
 
-                var comArg = input.Trim().Split(' ').ToList().FindAll( word => word != "" );
+                var comArg = input.Trim().Split(' ').ToList().FindAll(word => word != "");
 
+                
                 switch (comArg.Count)
                 {
                     case 1:
                         if (comArg[0].Equals(Commands[0])) Environment.Exit(0);
                         else Console.WriteLine("Unknown command.");
-                        
+
                         break;
-                    case 2: 
-                        if (comArg[0].Equals(Commands[1]))
+                    case 2:
+                        try
                         {
-                            switch (_mode)
+                            if (comArg[0].Equals(Commands[1]))
                             {
-                                case "T0":
-                                    var directoryPath = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent
-                                        ?.FullName;
-                                    var path = Path.Combine(
-                                        directoryPath ??
-                                        throw new InvalidOperationException("Unable to find grammar file"),
-                                        @"Resources\FreeGrammar.json");
-                                    var freeGrammar = new FreeGrammar(path);
-                                    var (result, inference) = freeGrammar.CheckAccepting(comArg[1]);
-                                    if (result)
-                                    {
-                                        Console.WriteLine($"Word {comArg[1]} accepted!");
-                                        GrammarUtil.PrintInference(comArg[1], directoryPath, GrammarType.T0, inference);
-                                    }
+                                string directoryPath =
+                                    Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.FullName ??
+                                    throw new InvalidOperationException("Unable to find grammar json directory.");
+                                string path;
 
-                                    break;
-                                case "T1":
-                                    //
+                                bool result;
+                                List<Tuple<List<string>, Production>> inference;
 
-                                    break;
-                            } 
+                                switch (_mode)
+                                {
+                                    case GrammarType.T0:
+                                        path = Path.Combine(
+                                            directoryPath ??
+                                            throw new InvalidOperationException("Unable to find grammar json."),
+                                            @"Resources\FreeGrammar.json");
+
+                                        var freeGrammar = new FreeGrammar(path);
+                                        (result, inference) = freeGrammar.CheckAccepting(comArg[1]);
+
+                                        if (result)
+                                        {
+                                            Console.WriteLine($"Word {comArg[1]} accepted.");
+                                            GrammarUtil.PrintInference(comArg[1], directoryPath, GrammarType.T0,
+                                                inference);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"Word {comArg[1]} not accepted.");
+                                        }
+
+                                        break;
+                                    case GrammarType.T1:
+                                        path = Path.Combine(
+                                            directoryPath ??
+                                            throw new InvalidOperationException("Unable to find grammar json."),
+                                            @"Resources\ContextSensitiveGrammar.json");
+
+                                        var contextSensitiveGrammar = new ContextSensitiveGrammar(path);
+                                        (result, inference) = contextSensitiveGrammar.CheckAccepting(comArg[1]);
+
+                                        if (result)
+                                        {
+                                            Console.WriteLine($"Word {comArg[1]} accepted.");
+                                            GrammarUtil.PrintInference(comArg[1], directoryPath, GrammarType.T1,
+                                                inference);
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"Word {comArg[1]} not accepted.");
+                                        }
+
+                                        break;
+                                }
+                            }
+                            else Console.WriteLine("Unknown command.");
                         }
-                        else Console.WriteLine("Unknown command.");
+                        catch(Exception exception)
+                        {
+                            Console.WriteLine(exception.Message);
+                        }
 
                         break;
                     default:
                         Console.WriteLine("Unknown command length.");
-                        
+
                         break;
                 }
             }

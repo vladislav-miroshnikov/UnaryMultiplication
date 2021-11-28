@@ -33,8 +33,8 @@ namespace UnaryMultiplication.Grammars
         public MachineGrammar(string path)
         {
             dynamic deserializeObject = JsonConvert.DeserializeObject(File.ReadAllText(path)) ??
-                                        throw new ArgumentNullException(
-                                            $"Can not deserialize json object.\nCheck the file by path:\n {path}");
+                                        throw new JsonException(
+                                            $"Bad grammar json syntax.\nCheck the file by path:\n{path}");
 
             StartState = deserializeObject.start_state.ToObject<string>();
             Blank = deserializeObject.blank.ToObject<string>();
@@ -72,6 +72,7 @@ namespace UnaryMultiplication.Grammars
 
             var inference = new List<Tuple<List<string>, Production>>();
             var sentenses = new HashSet<Tuple<List<string>>>();
+            
             while (queue.Count > 0)
             {
                 var dequeue = queue.Dequeue();

@@ -15,11 +15,11 @@ namespace UnaryMultiplication.Grammars
         {
             var terminals = turingMachine.LanguageAlphabet
                 .Where(symbol =>
-                    symbol != BoundarySymbols.Left.ToString() && symbol != BoundarySymbols.Right.ToString())
+                    symbol != BoundarySymbols.Left && symbol != BoundarySymbols.Right)
                 .ToHashSet();
             var tapeSymbols = turingMachine.TapeAlphabet
                 .Where(symbol =>
-                    symbol != BoundarySymbols.Left.ToString() && symbol != BoundarySymbols.Right.ToString())
+                    symbol != BoundarySymbols.Left && symbol != BoundarySymbols.Right)
                 .ToHashSet();
             HashSet<Production> productions = new HashSet<Production>();
 
@@ -355,14 +355,14 @@ namespace UnaryMultiplication.Grammars
 
         public (bool result, List<Tuple<List<string>, Production>>) CheckAccepting(string word)
         {
-            var symbols = word.Select(c => $"[{c},{c}]").ToList().Take(new Range(1, word.Length - 1));
+            var symbols = word.Select(c => $"[{c},{c}]").Take(new Range(1, word.Length - 1)).ToList();
             var tapeWord = new List<string> {$"[{StartState},{BoundarySymbols.Left},{word[0]},{word[0]}]"};
             tapeWord.AddRange(symbols);
             tapeWord.Add($"[{word[^1]},{word[^1]},{BoundarySymbols.Right}]");
 
             var inference = new List<Tuple<List<string>, Production>>
             {
-                new Tuple<List<string>, Production>(new List<string> {StartVariable},
+                new(new List<string> {StartVariable},
                     new Production(new List<string> {"A1"},
                         new List<string> {$"[qS,{BoundarySymbols.Left},1,1]", "A2"}))
             };
@@ -379,6 +379,7 @@ namespace UnaryMultiplication.Grammars
             inference.Add(new Tuple<List<string>, Production>(current,
                 new Production(new List<string> {"A2"}, new List<string> {$"[1,1,{BoundarySymbols.Right}]"})));
             var (result, tuples) = CheckTreeInference(tapeWord);
+
             return (result, inference.Concat(tuples).ToList());
         }
     }
