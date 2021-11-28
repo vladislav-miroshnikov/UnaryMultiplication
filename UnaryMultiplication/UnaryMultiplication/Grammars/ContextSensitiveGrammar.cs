@@ -7,7 +7,7 @@ namespace UnaryMultiplication.Grammars
 {
     public sealed class ContextSensitiveGrammar : MachineGrammar
     {
-        public ContextSensitiveGrammar(string path) : base(path)
+        public ContextSensitiveGrammar(string text) : base(text)
         {
         }
 
@@ -169,7 +169,7 @@ namespace UnaryMultiplication.Grammars
                             }
                         }
 
-                        if (x == BoundarySymbols.Left.ToString())
+                        if (x == BoundarySymbols.Left)
                         {
                             if (direction == Directions.Right)
                             {
@@ -195,7 +195,7 @@ namespace UnaryMultiplication.Grammars
                                         }));
                                 }
                             }
-                            else if (x == BoundarySymbols.Right.ToString())
+                            else if (x == BoundarySymbols.Right)
                             {
                                 if (direction == Directions.Left)
                                 {

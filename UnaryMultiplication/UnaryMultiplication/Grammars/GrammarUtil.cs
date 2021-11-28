@@ -45,7 +45,7 @@ namespace UnaryMultiplication.Grammars
         public static void PrintInference(string word, string directoryPath,
             GrammarType grammarType, List<Tuple<List<string>, Production>> inference)
         {
-            var path = Path.Combine(directoryPath, @$"Resources\{grammarType}Inference.txt");
+            var path = Path.Combine(directoryPath, @$"{grammarType}_{word.Replace('*', 'X')}_Inference.txt");
             StreamWriter file = new(path);
             
             file.WriteLine($"Word: {word}");
@@ -61,7 +61,7 @@ namespace UnaryMultiplication.Grammars
             file.WriteLine($"Result: {string.Join(" ", word)}");
             file.Close();
             
-            Console.WriteLine($"You can find file with inference by:\n{path}");
+            Console.WriteLine($@"You can find file with inference by:\n{path}");
         }
     }
 }

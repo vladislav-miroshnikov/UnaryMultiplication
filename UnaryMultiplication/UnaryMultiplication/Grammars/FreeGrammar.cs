@@ -7,7 +7,7 @@ namespace UnaryMultiplication.Grammars
 {
     public sealed class FreeGrammar : MachineGrammar
     {
-        public FreeGrammar(string path) : base(path)
+        public FreeGrammar(string text) : base(text)
         {
         }
 

@@ -8,9 +8,9 @@ namespace UnaryMultiplication.Grammars
 {
     public abstract class MachineGrammar
     {
-        public const string Eps = "eps";
+        protected const string Eps = "eps";
 
-        public HashSet<string> Variables { get; protected init; }
+        protected HashSet<string> Variables { get; init; }
 
         public HashSet<string> Terminals { get; protected init; }
 
@@ -30,11 +30,11 @@ namespace UnaryMultiplication.Grammars
         {
         }
 
-        public MachineGrammar(string path)
+        public MachineGrammar(string text)
         {
-            dynamic deserializeObject = JsonConvert.DeserializeObject(File.ReadAllText(path)) ??
+            dynamic deserializeObject = JsonConvert.DeserializeObject(text) ??
                                         throw new JsonException(
-                                            $"Bad grammar json syntax.\nCheck the file by path:\n{path}");
+                                            $"Bad grammar json syntax.\nCheck the file by path");
 
             StartState = deserializeObject.start_state.ToObject<string>();
             Blank = deserializeObject.blank.ToObject<string>();
@@ -71,14 +71,15 @@ namespace UnaryMultiplication.Grammars
             var size = InferenceProductions.Max(x => x.Head.Count);
 
             var inference = new List<Tuple<List<string>, Production>>();
-            var sentenses = new HashSet<Tuple<List<string>>>();
-            
+            var sentenses = new HashSet<List<string>>();
+            var terminalsWithEps = Terminals.Union(new List<string> { Eps }).ToList();
+
             while (queue.Count > 0)
             {
                 var dequeue = queue.Dequeue();
-                if (Terminals.Union(new List<string> { Eps }).All(x => dequeue.Contains(x)))
+                if (dequeue.All(x => terminalsWithEps.Contains(x)))
                     return (true, inference);
-                if (sentenses.Contains(new Tuple<List<string>>(dequeue)))
+                if (sentenses.Any(x => x.SequenceEqual(dequeue)))
                     continue;
                 for (var subTreeSize = 1; subTreeSize < size + 1; subTreeSize++)
                 {
@@ -91,13 +92,14 @@ namespace UnaryMultiplication.Grammars
                         foreach (var production in productions)
                         {
                             if (!production.Head.SequenceEqual(subStr)) continue;
-                            queue.Enqueue(prefix.Concat(production.Body).Concat(suffix).ToList());
+                            var list = prefix.Concat(production.Body).Concat(suffix).ToList();
+                            queue.Enqueue(list);
                             inference.Add(new Tuple<List<string>, Production>(dequeue, production));
                         }
                     }
                 }
 
-                sentenses.Add(new Tuple<List<string>>(dequeue));
+                sentenses.Add(dequeue);
             }
 
             return (false, inference);

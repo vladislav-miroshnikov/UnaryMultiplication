@@ -41,22 +41,15 @@ namespace UnaryMultiplication
                             if (comArg[0].Equals(Commands[1]))
                             {
                                 string directoryPath =
-                                    Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent?.FullName ??
-                                    throw new InvalidOperationException("Unable to find grammar json directory.");
-                                string path;
-
+                                    Path.GetFullPath(Directory.GetCurrentDirectory());
+                                
                                 bool result;
                                 List<Tuple<List<string>, Production>> inference;
 
                                 switch (_mode)
                                 {
                                     case GrammarType.T0:
-                                        path = Path.Combine(
-                                            directoryPath ??
-                                            throw new InvalidOperationException("Unable to find grammar json."),
-                                            @"Resources\FreeGrammar.json");
-
-                                        var freeGrammar = new FreeGrammar(path);
+                                        var freeGrammar = new FreeGrammar( System.Text.Encoding.Default.GetString(Resources.FreeGrammar));
                                         (result, inference) = freeGrammar.CheckAccepting(comArg[1]);
 
                                         if (result)
@@ -72,12 +65,7 @@ namespace UnaryMultiplication
 
                                         break;
                                     case GrammarType.T1:
-                                        path = Path.Combine(
-                                            directoryPath ??
-                                            throw new InvalidOperationException("Unable to find grammar json."),
-                                            @"Resources\ContextSensitiveGrammar.json");
-
-                                        var contextSensitiveGrammar = new ContextSensitiveGrammar(path);
+                                        var contextSensitiveGrammar = new ContextSensitiveGrammar(System.Text.Encoding.Default.GetString(Resources.ContextSensitiveGrammar));
                                         (result, inference) = contextSensitiveGrammar.CheckAccepting(comArg[1]);
 
                                         if (result)
