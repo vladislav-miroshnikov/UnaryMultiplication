@@ -17,9 +17,9 @@ namespace UnaryMultiplication.Grammars
             file.WriteLine($"\t\"start_variable\": \"{grammar.StartVariable}\",");
             file.WriteLine($"\t\"start_state\": \"{grammar.StartState}\",");
 
-            WriteJsonArray(file, "generated_productions", grammar.GeneratedProductions);
+            WriteJsonArray(file, "generated_productions", grammar.GenerativeProductions);
             WriteJsonArray(file, "terminals_productions", grammar.TerminalProductions);
-            WriteJsonArray(file, "check_productions", grammar.CheckProductions, false);
+            WriteJsonArray(file, "check_productions", grammar.InferenceProductions, false);
             file.Write("}");
             file.Close();
         }

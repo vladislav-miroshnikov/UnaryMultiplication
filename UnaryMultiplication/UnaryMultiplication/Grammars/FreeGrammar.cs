@@ -13,10 +13,10 @@ namespace UnaryMultiplication.Grammars
 
         public FreeGrammar(TuringMachine turingMachine)
         {
-            GeneratedProductions = new HashSet<Production>();
+            GenerativeProductions = new HashSet<Production>();
             InitGenProductions(turingMachine);
 
-            CheckProductions = new HashSet<Production>();
+            InferenceProductions = new HashSet<Production>();
 
             var alphabetWithEps = turingMachine.LanguageAlphabet.Union(new List<string> { Eps }).ToList();
             InitCheckProductions(turingMachine, alphabetWithEps);
@@ -42,19 +42,19 @@ namespace UnaryMultiplication.Grammars
 
         private void InitGenProductions(TuringMachine turingMachine)
         {
-            GeneratedProductions.Add(new Production(new List<string> { "S1" },
+            GenerativeProductions.Add(new Production(new List<string> { "S1" },
                 new List<string> { turingMachine.StartState, "S2" }));
             foreach (var symbol in turingMachine.LanguageAlphabet)
             {
-                GeneratedProductions.Add(new Production(new List<string> { "S2" },
+                GenerativeProductions.Add(new Production(new List<string> { "S2" },
                     new List<string> { $"[{symbol}, {symbol}]", "S2" }));
             }
 
-            GeneratedProductions.Add(new Production(new List<string> { "S2" }, new List<string> { "S3" }));
+            GenerativeProductions.Add(new Production(new List<string> { "S2" }, new List<string> { "S3" }));
 
-            GeneratedProductions.Add(new Production(new List<string> { "S3" },
+            GenerativeProductions.Add(new Production(new List<string> { "S3" },
                 new List<string> { $"[{Eps}, {Blank}]", "S3" }));
-            GeneratedProductions.Add(new Production(new List<string> { "S3" }, new List<string> { Eps }));
+            GenerativeProductions.Add(new Production(new List<string> { "S3" }, new List<string> { Eps }));
         }
 
         private void InitCheckProductions(TuringMachine turingMachine, List<string> alphabetWithEps)
@@ -64,7 +64,7 @@ namespace UnaryMultiplication.Grammars
                 foreach (var ((stateFrom, symbolFrom), (stateTo, symbolTo, direction)) in turingMachine.Transitions)
                 {
                     if (direction == Directions.Right)
-                        CheckProductions.Add(new Production(new List<string> { stateFrom, $"[{symbol}, {symbolFrom}]" },
+                        InferenceProductions.Add(new Production(new List<string> { stateFrom, $"[{symbol}, {symbolFrom}]" },
                             new List<string> { $"[{symbol}, {symbolTo}]", stateTo }));
                 }
             }
@@ -77,7 +77,7 @@ namespace UnaryMultiplication.Grammars
                     foreach (var ((stateFrom, symbolFrom), (stateTo, symbolTo, direction)) in turingMachine.Transitions)
                     {
                         if (direction == Directions.Left)
-                            CheckProductions.Add(new Production(
+                            InferenceProductions.Add(new Production(
                                 new List<string>
                                 {
                                     $"[{cartesianPair.y}, {tapeSymbol}]", stateFrom,

@@ -20,9 +20,9 @@ namespace UnaryMultiplication.Grammars
 
         public string Blank { get; protected init; } = "_";
 
-        public HashSet<Production> GeneratedProductions { get; protected init; }
+        public HashSet<Production> GenerativeProductions { get; protected init; }
 
-        public HashSet<Production> CheckProductions { get; protected init; }
+        public HashSet<Production> InferenceProductions { get; protected init; }
 
         public HashSet<Production> TerminalProductions { get; protected init; }
 
@@ -40,16 +40,16 @@ namespace UnaryMultiplication.Grammars
             Blank = deserializeObject.blank.ToObject<string>();
             StartVariable = deserializeObject.start_variable.ToObject<string>();
             Terminals = deserializeObject.terminals.ToObject<HashSet<string>>();
-            GeneratedProductions = new HashSet<Production>();
+            GenerativeProductions = new HashSet<Production>();
             Variables = new HashSet<string>();
-            InitProductions(GeneratedProductions,
-                (HashSet<string>)deserializeObject.generated_productions.ToObject<HashSet<string>>());
-            CheckProductions = new HashSet<Production>();
-            InitProductions(CheckProductions,
-                (HashSet<string>)deserializeObject.check_productions.ToObject<HashSet<string>>());
+            InitProductions(GenerativeProductions,
+                (HashSet<string>)deserializeObject.generative_productions.ToObject<HashSet<string>>());
+            InferenceProductions = new HashSet<Production>();
+            InitProductions(InferenceProductions,
+                (HashSet<string>)deserializeObject.inference_productions.ToObject<HashSet<string>>());
             TerminalProductions = new HashSet<Production>();
             InitProductions(TerminalProductions,
-                (HashSet<string>)deserializeObject.terminals_productions.ToObject<HashSet<string>>());
+                (HashSet<string>)deserializeObject.terminal_productions.ToObject<HashSet<string>>());
             Variables = Variables.Except(Terminals).ToHashSet();
         }
 
@@ -68,7 +68,7 @@ namespace UnaryMultiplication.Grammars
         {
             var queue = new Queue<List<string>>();
             queue.Enqueue(tapeWord);
-            var size = CheckProductions.Max(x => x.Head.Count);
+            var size = InferenceProductions.Max(x => x.Head.Count);
 
             var inference = new List<Tuple<List<string>, Production>>();
             var sentenses = new HashSet<Tuple<List<string>>>();
@@ -86,7 +86,7 @@ namespace UnaryMultiplication.Grammars
                         var prefix = dequeue.Take(position);
                         var subStr = dequeue.Take(new Range(position, position + subTreeSize));
                         var suffix = dequeue.Take(new Range(position + subTreeSize, dequeue.Count));
-                        var productions = CheckProductions.Union(TerminalProductions).ToList();
+                        var productions = InferenceProductions.Union(TerminalProductions).ToList();
                         foreach (var production in productions)
                         {
                             if (!production.Head.SequenceEqual(subStr)) continue;
