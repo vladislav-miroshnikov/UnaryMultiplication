@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnaryMultiplication.Grammars;
 
@@ -37,8 +38,20 @@ namespace UnaryMultiplication
                             switch (_mode)
                             {
                                 case "T0":
-                                    //
-                                    
+                                    var directoryPath = Directory.GetParent(Directory.GetCurrentDirectory())?.Parent?.Parent
+                                        ?.FullName;
+                                    var path = Path.Combine(
+                                        directoryPath ??
+                                        throw new InvalidOperationException("Unable to find grammar file"),
+                                        @"Resources\FreeGrammar.json");
+                                    var freeGrammar = new FreeGrammar(path);
+                                    var (result, inference) = freeGrammar.CheckAccepting(comArg[1]);
+                                    if (result)
+                                    {
+                                        Console.WriteLine($"Word {comArg[1]} accepted!");
+                                        GrammarUtil.PrintInference(comArg[1], directoryPath, GrammarType.T0, inference);
+                                    }
+
                                     break;
                                 case "T1":
                                     //
