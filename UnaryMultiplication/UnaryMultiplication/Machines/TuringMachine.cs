@@ -41,8 +41,8 @@ namespace UnaryMultiplication.Machines
             {
                 var key = (string)transition.Name;
                 var value = (string)transition.Value.Value;
-                var stateSymbolFrom = key.Split(',');
-                var stateSymbolToDirection = value.Split(',');
+                var stateSymbolFrom = key.Split(';');
+                var stateSymbolToDirection = value.Split(';');
                 Transitions.Add(new Tuple<string, string>(stateSymbolFrom[0], stateSymbolFrom[1]),
                     new Tuple<string, string, string>(stateSymbolToDirection[0], stateSymbolToDirection[1],
                         stateSymbolToDirection[2]));

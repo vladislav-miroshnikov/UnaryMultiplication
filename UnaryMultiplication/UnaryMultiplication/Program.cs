@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using UnaryMultiplication.Machines;
+using UnaryMultiplication.Grammars;
 
 namespace UnaryMultiplication
 {
     public static class Program
     {
         private static string _mode = "";
-        private static readonly List<string> Commands = new List<string> {"exit", "to_grammar", "check"};
-
-        private static LinearlyBoundedAutomaton? _linearlyBoundedAutomaton;
+        private static readonly List<string> Commands = new List<string> {"exit", "check"};
 
         public static void Main(string[] args)
         {
@@ -34,26 +31,8 @@ namespace UnaryMultiplication
                         else Console.WriteLine("Unknown command.");
                         
                         break;
-                    case 2:
+                    case 2: 
                         if (comArg[0].Equals(Commands[1]))
-                        {
-                            if (File.Exists(comArg[1]) && comArg[1].EndsWith(".json"))
-                            {
-                                switch (_mode)
-                                {
-                                    case "T0":
-                                        //
-                                        
-                                        break;
-                                    case "T1":
-                                        _linearlyBoundedAutomaton = new LinearlyBoundedAutomaton(comArg[1]);
-                                        
-                                        break;
-                                } 
-                            }
-                            else Console.WriteLine("Wrong .json file path.");
-                        }
-                        else if (comArg[0].Equals(Commands[2]))
                         {
                             switch (_mode)
                             {
@@ -63,7 +42,7 @@ namespace UnaryMultiplication
                                     break;
                                 case "T1":
                                     //
-                                    
+
                                     break;
                             } 
                         }
@@ -71,7 +50,7 @@ namespace UnaryMultiplication
 
                         break;
                     default:
-                        Console.WriteLine("Unknown commands count.");
+                        Console.WriteLine("Unknown command length.");
                         
                         break;
                 }
