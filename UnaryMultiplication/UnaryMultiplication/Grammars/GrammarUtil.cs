@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -39,6 +40,25 @@ namespace UnaryMultiplication.Grammars
             file.Write("\t]");
             if (needComma)
                 file.WriteLine(",");
+        }
+
+        public static void PrintInference(string word, string directoryPath,
+            GrammarType grammarType, List<Tuple<List<string>, Production>> inference)
+        {
+            var path = Path.Combine(directoryPath, @$"Resources\{grammarType}Inference.txt");
+            StreamWriter file = new(path);
+            file.WriteLine($"Inference of word {word}:");
+
+            foreach (var (tapeWord, production) in inference)
+            {
+                file.WriteLine(string.Join(" ", tapeWord));
+                var prod = string.Join(" ", production.Head) + " -> " + string.Join(" ", production.Body);
+                file.WriteLine($"\tApplied production: {prod}");
+            }
+
+            file.WriteLine($"Result: {string.Join(" ", word)}");
+            file.Close();
+            Console.WriteLine($"You can find file with inference by {path}");
         }
     }
 }
